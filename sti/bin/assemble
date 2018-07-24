@@ -73,7 +73,7 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   clear_maven_repository
 
   popd &> /dev/null
-elif [ -f "$LOCAL_SOURCE_DIR/build.gradle" ]; then
+elif [ -f "$LOCAL_SOURCE_DIR/build.gradle" ] || [ -f "$LOCAL_SOURCE_DIR/build.gradle.kts" ]; then
   # the subdirectory within LOCAL_SOURCE_DIR from where we should copy build
   # artifacts (*.war, *.jar)
   ARTIFACT_DIR=${ARTIFACT_DIR:-build/libs}
