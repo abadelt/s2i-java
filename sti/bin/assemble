@@ -90,17 +90,12 @@ elif [ -f "$LOCAL_SOURCE_DIR/build.gradle" ] || [ -f "$LOCAL_SOURCE_DIR/build.gr
   pushd $LOCAL_SOURCE_DIR &> /dev/null
 
   if [ -z "$BUILDER_ARGS" ]; then
-    export BUILDER_ARGS="build -x test"
+    export BUILDER_ARGS="build"
+    # -x test
     # TODO: Specify setting file with -c sss
   fi
 
   echo "Found gradle.build ... attempting to build with '$GRADLE_CMD -s ${BUILDER_ARGS}'"
-
-  echo "Is rsync available?"
-  echo "`rsync --version`"
-
-  echo "Gradle version:"
-  $GRADLE_CMD --version
 
   # Execute the actual build
   $GRADLE_CMD -s $BUILDER_ARGS
@@ -117,11 +112,12 @@ elif [ -f "$LOCAL_SOURCE_DIR/build.gradle" ] || [ -f "$LOCAL_SOURCE_DIR/build.gr
   copy_artifacts "$ARTIFACT_DIR" jar
 
 
-  # clean up after maven
-  $GRADLE_CMD clean
-#  if [ -d "$HOME/.m2/repository" ]; then
-#    rm -r "$HOME/.m2/repository"
-#  fi
+  # clean up after gradle? Not needed - we will throw away the build image anyway
+  # But we need access to the created jar, and to the test results
+  # $GRADLE_CMD clean
+
+  echo "Looking for test results in /opt/app-root/src/source/build/test-results/"
+  echo `find /opt/app-root/src/source/build/test-results/ -name TEST-*.xml`
 
   popd &> /dev/null
 else
